@@ -10,6 +10,7 @@ const inputElevation = document.querySelector('.form__input--climb');
 
 // Использование Geolocation API
 // Отображение карты с использованием библиотеки Leaflet
+// Отображение маркера на карте
 
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
@@ -22,16 +23,33 @@ if (navigator.geolocation) {
       const coords = [latitude, longitude];
 
       const map = L.map('map').setView(coords, 13);
+      // console.log(map);
 
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
-      L.marker(coords)
-        .addTo(map)
-        .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-        .openPopup();
+      L.marker(coords).addTo(map).bindPopup('Моё местоположение').openPopup();
+
+      map.on('click', function (mapEvent) {
+        console.log(mapEvent);
+        const { lat, lng } = mapEvent.latlng;
+
+        L.marker([lat, lng])
+          .addTo(map)
+          .bindPopup(
+            L.popup({
+              maxWidth: 200,
+              minWidth: 100,
+              autoClose: false,
+              closeOnClick: false,
+              className: 'running-popup',
+            })
+          )
+          .setPopupContent('Тренировка')
+          .openPopup();
+      });
     },
     function () {
       alert('Невозможно получить ваше местоположение!');
