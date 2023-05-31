@@ -5,12 +5,15 @@ const containerWorkouts = document.querySelector('.workouts');
 const inputType = document.querySelector('.form__input--type');
 const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
-const inputCadence = document.querySelector('.form__input--temp');
-const inputElevation = document.querySelector('.form__input--climb');
+const inputTemp = document.querySelector('.form__input--temp');
+const inputClimb = document.querySelector('.form__input--climb');
+
+let map, mapEvent;
 
 // Использование Geolocation API
 // Отображение карты с использованием библиотеки Leaflet
 // Отображение маркера на карте
+// Размещение формы ввода тренировки
 
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
@@ -22,7 +25,7 @@ if (navigator.geolocation) {
 
       const coords = [latitude, longitude];
 
-      const map = L.map('map').setView(coords, 13);
+      map = L.map('map').setView(coords, 13);
       // console.log(map);
 
       L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
@@ -30,25 +33,13 @@ if (navigator.geolocation) {
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
-      L.marker(coords).addTo(map).bindPopup('Моё местоположение').openPopup();
+      // L.marker(coords).addTo(map).bindPopup('Моё местоположение').openPopup();
 
-      map.on('click', function (mapEvent) {
-        console.log(mapEvent);
-        const { lat, lng } = mapEvent.latlng;
-
-        L.marker([lat, lng])
-          .addTo(map)
-          .bindPopup(
-            L.popup({
-              maxWidth: 200,
-              minWidth: 100,
-              autoClose: false,
-              closeOnClick: false,
-              className: 'running-popup',
-            })
-          )
-          .setPopupContent('Тренировка')
-          .openPopup();
+      // Обработка клика на карте
+      map.on('click', function (event) {
+        mapEvent = event;
+        form.classList.remove('hidden');
+        inputDistance.focus();
       });
     },
     function () {
@@ -56,3 +47,37 @@ if (navigator.geolocation) {
     }
   );
 }
+
+form.addEventListener('submit', function (event) {
+  event.preventDefault();
+
+  // Очистка полей ввода данных
+  inputDistance.value =
+    inputDuration.value =
+    inputTemp.value =
+    inputClimb.value =
+      '';
+
+  // Отображение маркета
+  console.log(mapEvent);
+  const { lat, lng } = mapEvent.latlng;
+
+  L.marker([lat, lng])
+    .addTo(map)
+    .bindPopup(
+      L.popup({
+        maxWidth: 200,
+        minWidth: 100,
+        autoClose: false,
+        closeOnClick: false,
+        className: 'running-popup',
+      })
+    )
+    .setPopupContent('Тренировка')
+    .openPopup();
+});
+
+inputType.addEventListener('change', function () {
+  inputClimb.closest('.form__row').classList.toggle('form__row--hidden');
+  inputTemp.closest('.form__row').classList.toggle('form__row--hidden');
+});
