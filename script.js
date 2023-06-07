@@ -75,12 +75,15 @@ class App {
   #workouts = [];
 
   constructor() {
+    // Получение местоположения пользователя
     this._getPosition();
 
+    // Получение данных из local storage
+    this._getLocalStorageData();
+
+    // Добавление обработчиков события
     form.addEventListener('submit', this._newWorkout.bind(this));
-
     inputType.addEventListener('change', this._toggleClimbField);
-
     containerWorkouts.addEventListener('click', this._moveToWorkout.bind(this));
   }
 
@@ -116,6 +119,11 @@ class App {
 
     // Обработка клика на карте
     this.#map.on('click', this._showForm.bind(this));
+
+    // Отображение тренировок из local storage на карте
+    this.#workouts.forEach(workout => {
+      this._displayWorkout(workout);
+    });
   }
 
   _showForm(e) {
@@ -193,6 +201,10 @@ class App {
 
     // Спрятать форму и очистить поля ввода данных
     this._hideForm();
+
+    // Добавить все тренировки в локальное хранилище
+
+    this._addWorkoutsToLocalStorage();
   }
 
   _displayWorkout(workout) {
@@ -281,8 +293,30 @@ class App {
       },
     });
 
-    workout.click();
-    console.log(workout);
+    // workout.click();
+    // console.log(workout);
+  }
+
+  _addWorkoutsToLocalStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+  }
+
+  _getLocalStorageData() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+    console.log(data);
+
+    if (!data) return;
+
+    this.#workouts = data;
+
+    this.#workouts.forEach(workout => {
+      this._displayWorkoutOnSidebar(workout);
+    });
+  }
+
+  reset() {
+    localStorage.removeItem('workouts');
+    location.reload();
   }
 }
 
