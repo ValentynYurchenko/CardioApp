@@ -128,6 +128,32 @@ a:visited {
   transition: all 0.5s, transform 1ms;
 }
 
+.form_edit {
+  background-color: var(--color-dark--2);
+  border-radius: 5px;
+  padding: 1.5rem 2.75rem;
+  margin-bottom: 1.75rem;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 2.5rem;
+
+  /* Match height and activity boxes */
+  height: 9.25rem;
+  transition: all 0.5s, transform 1ms;
+  transform: translateY(1.5rem);
+  color: rgb(255, 255, 255);
+  background-color: #ae0000;
+}
+
+.form_edit.hidden {
+  transform: translateY(-30rem);
+  height: 0;
+  padding: 0 2.25rem;
+  margin-bottom: 0;
+  opacity: 0;
+}
+
 .form.hidden {
   transform: translateY(-30rem);
   height: 0;
@@ -168,6 +194,44 @@ a:visited {
 }
 
 .form__btn {
+  display: none;
+}
+
+.workout__btn {
+  text-decoration: wavy;
+  color: #e8e8e8;
+  padding: 2px;
+  font: 13px Roboto, sans-serif;
+  font-weight: 600;
+  background-color: var(--color-dark--2);
+  cursor: pointer;
+}
+
+.workout__btns {
+  position: relative;
+  /* top: 50%;
+  left: 350%; */
+  transform: translate(350%, 50%);
+}
+
+.total__btn {
+  text-decoration: wavy;
+  font-style: inherit;
+  font-weight: bolder;
+  font-size: 13px;
+  padding: 8px;
+  color: rgb(255, 255, 255);
+  background-color: var(--color-dark--1);
+  cursor: pointer;
+}
+
+.total__btns {
+  position: relative;
+  /* left: 25%; */
+  text-align: center;
+}
+
+.total__btns-hidden {
   display: none;
 }
 
