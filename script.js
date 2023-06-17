@@ -146,6 +146,8 @@ class App {
   }
 
   _showForm(e) {
+    if (!formEdit.classList.contains('hidden')) return;
+
     this.#mapEvent = e;
     form.classList.remove('hidden');
     inputDistance.focus();
@@ -171,6 +173,12 @@ class App {
 
     const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
 
+    const displayError = function (message) {
+      const html = `
+      <p class="error_text">${message}</p>`;
+      containerWorkouts.insertAdjacentHTML('afterbegin', html);
+    };
+
     e.preventDefault();
 
     const { lat, lng } = this.#mapEvent.latlng;
@@ -189,7 +197,9 @@ class App {
         !areNumbers(distance, duration, temp) ||
         !areNumbersPositive(distance, duration, temp)
       )
-        return alert('Введите положительное число!');
+        return displayError('Введите положительное число!');
+
+      document.querySelectorAll('.error_text').forEach(item => item.remove());
 
       workout = new Running([lat, lng], distance, duration, temp);
     }
@@ -202,7 +212,9 @@ class App {
         !areNumbers(distance, duration, climb) ||
         !areNumbersPositive(distance, duration)
       )
-        return alert('Введите положительное число!');
+        return displayError('Введите положительное число!');
+
+      document.querySelectorAll('.error_text').forEach(item => item.remove());
 
       workout = new Cycling([lat, lng], distance, duration, climb);
     }
@@ -409,6 +421,9 @@ class App {
 
   _openEditWorkout(e) {
     e.stopPropagation();
+
+    if (!form.classList.contains('hidden')) return;
+
     const workoutElement = e.target.closest('.workout');
 
     this.workoutEdit = this.#workouts.find(
@@ -438,6 +453,12 @@ class App {
 
     const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
 
+    const displayError = function (message) {
+      const html = `
+      <p class="error_text">${message}</p>`;
+      containerWorkouts.insertAdjacentHTML('afterbegin', html);
+    };
+
     e.preventDefault();
 
     // Получить данные из формы
@@ -452,7 +473,9 @@ class App {
         !areNumbers(distance, duration, temp) ||
         !areNumbersPositive(distance, duration, temp)
       )
-        return alert('Введите положительное число!');
+        return displayError('Введите положительное число!');
+
+      document.querySelectorAll('.error_text').forEach(item => item.remove());
 
       this.workoutEdit.type = type;
       this.workoutEdit.distance = distance;
@@ -467,7 +490,9 @@ class App {
         !areNumbers(distance, duration, climb) ||
         !areNumbersPositive(distance, duration)
       )
-        return alert('Введите положительное число!');
+        return displayError('Введите положительное число!');
+
+      document.querySelectorAll('.error_text').forEach(item => item.remove());
 
       this.workoutEdit.type = type;
       this.workoutEdit.distance = distance;
