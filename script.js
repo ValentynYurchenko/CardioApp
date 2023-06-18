@@ -17,6 +17,7 @@ const inputDistanceEdit = document.querySelector('.form__input--distance_edit');
 const inputDurationEdit = document.querySelector('.form__input--duration_edit');
 const inputTempEdit = document.querySelector('.form__input--temp_edit');
 const inputClimbEdit = document.querySelector('.form__input--climb_edit');
+const errorText = document.querySelector('.error_text');
 
 class Workout {
   date = new Date();
@@ -168,17 +169,6 @@ class App {
   }
 
   _newWorkout(e) {
-    const areNumbers = (...numbers) =>
-      numbers.every(num => Number.isFinite(num));
-
-    const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
-
-    const displayError = function (message) {
-      const html = `
-      <p class="error_text">${message}</p>`;
-      containerWorkouts.insertAdjacentHTML('afterbegin', html);
-    };
-
     e.preventDefault();
 
     const { lat, lng } = this.#mapEvent.latlng;
@@ -194,12 +184,12 @@ class App {
       const temp = +inputTemp.value;
       // Проверка валидности данных
       if (
-        !areNumbers(distance, duration, temp) ||
-        !areNumbersPositive(distance, duration, temp)
+        !this.areNumbers(distance, duration, temp) ||
+        !this.areNumbersPositive(distance, duration, temp)
       )
-        return displayError('Введите положительное число!');
+        return this.displayError();
 
-      document.querySelectorAll('.error_text').forEach(item => item.remove());
+      this.hideError();
 
       workout = new Running([lat, lng], distance, duration, temp);
     }
@@ -209,12 +199,12 @@ class App {
       const climb = +inputClimb.value;
       // Проверка валидности данных
       if (
-        !areNumbers(distance, duration, climb) ||
-        !areNumbersPositive(distance, duration)
+        !this.areNumbers(distance, duration, climb) ||
+        !this.areNumbersPositive(distance, duration)
       )
-        return displayError('Введите положительное число!');
+        return this.displayError();
 
-      document.querySelectorAll('.error_text').forEach(item => item.remove());
+      this.hideError();
 
       workout = new Cycling([lat, lng], distance, duration, climb);
     }
@@ -448,17 +438,6 @@ class App {
   }
 
   _saveEditWorkout(e) {
-    const areNumbers = (...numbers) =>
-      numbers.every(num => Number.isFinite(num));
-
-    const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
-
-    const displayError = function (message) {
-      const html = `
-      <p class="error_text">${message}</p>`;
-      containerWorkouts.insertAdjacentHTML('afterbegin', html);
-    };
-
     e.preventDefault();
 
     // Получить данные из формы
@@ -470,12 +449,12 @@ class App {
       const temp = +inputTempEdit.value;
       // Проверка валидности данных
       if (
-        !areNumbers(distance, duration, temp) ||
-        !areNumbersPositive(distance, duration, temp)
+        !this.areNumbers(distance, duration, temp) ||
+        !this.areNumbersPositive(distance, duration, temp)
       )
-        return displayError('Введите положительное число!');
+        return this.displayError();
 
-      document.querySelectorAll('.error_text').forEach(item => item.remove());
+      this.hideError();
 
       this.workoutEdit.type = type;
       this.workoutEdit.distance = distance;
@@ -487,12 +466,12 @@ class App {
       const climb = +inputClimbEdit.value;
       // Проверка валидности данных
       if (
-        !areNumbers(distance, duration, climb) ||
-        !areNumbersPositive(distance, duration)
+        !this.areNumbers(distance, duration, climb) ||
+        !this.areNumbersPositive(distance, duration)
       )
-        return displayError('Введите положительное число!');
+        return this.displayError();
 
-      document.querySelectorAll('.error_text').forEach(item => item.remove());
+      this.hideError();
 
       this.workoutEdit.type = type;
       this.workoutEdit.distance = distance;
@@ -512,6 +491,22 @@ class App {
       inputTempEdit.value =
       inputClimbEdit.value =
         '';
+  }
+
+  areNumbers(...numbers) {
+    return numbers.every(num => Number.isFinite(num));
+  }
+
+  areNumbersPositive(...numbers) {
+    return numbers.every(num => num > 0);
+  }
+
+  displayError() {
+    errorText.classList.remove('error_text_hidden');
+  }
+
+  hideError() {
+    errorText.classList.add('error_text_hidden');
   }
 }
 

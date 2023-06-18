@@ -295,3 +295,8 @@ a:visited {
   margin-bottom: 1%;
   transform: translateX(20%);
 }
+
+.error_text_hidden {
+  display: none;
+  transform: translateY(-10rem);
+}

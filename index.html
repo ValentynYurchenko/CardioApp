@@ -36,6 +36,7 @@
       <img src="/icon.png" alt="icon" class="icon" />
 
       <ul class="workouts">
+        <p class="error_text error_text_hidden">Введите положительное число!</p>
         <form class="form_edit hidden">
           <div class="form__row">
             <label class="form__label">Тип</label>
@@ -115,44 +116,6 @@
           </button>
           <button class="total__btn sort_btn">сортировать</button>
         </div>
-        <!-- <form class="form_edit hidden">
-          <div class="form__row">
-            <label class="form__label">Тип</label>
-            <select class="form__input form__input--type_edit">
-              <option value="running">Пробежка</option>
-              <option value="cycling">Велосипед</option>
-            </select>
-          </div>
-          <div class="form__row">
-            <label class="form__label">Расстояние</label>
-            <input
-              class="form__input form__input--distance_edit"
-              placeholder="km"
-            />
-          </div>
-          <div class="form__row">
-            <label class="form__label">Длительность</label>
-            <input
-              class="form__input form__input--duration_edit"
-              placeholder="мин"
-            />
-          </div>
-          <div class="form__row form__row--hidden">
-            <label class="form__label">Темп</label>
-            <input
-              class="form__input form__input--temp_edit"
-              placeholder="шаг/мин"
-            />
-          </div>
-          <div class="form__row form__row--hidden">
-            <label class="form__label">Подъём</label>
-            <input
-              class="form__input form__input--climb_edit"
-              placeholder="метров"
-            />
-          </div>
-          <button class="form__btn">OK</button>
-        </form> -->
 
         <!-- <li class="workout workout--running" data-id="1234567890">
           <h2 class="workout__title">Пробежка 15.05.2021</h2>
